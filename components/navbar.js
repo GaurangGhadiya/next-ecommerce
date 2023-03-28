@@ -14,9 +14,9 @@ const Navbar = () => {
     </Link>
     <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
       <Link href={"/tshirts"} className="mr-5 hover:text-white">Tshirts</Link>
-      <Link href={"/"} className="mr-5 hover:text-white">Second Link</Link>
-      <Link href={"/"} className="mr-5 hover:text-white">Third Link</Link>
-      <Link href={"/"} className="mr-5 hover:text-white">Fourth Link</Link>
+      <Link href={"/hoodies"} className="mr-5 hover:text-white">Hoodies</Link>
+      <Link href={"/stickers"} className="mr-5 hover:text-white">Stickers</Link>
+      <Link href={"/mugs"} className="mr-5 hover:text-white">Mugs</Link>
     </nav>
     <button className="inline-flex text-black items-center bg-white border-0 py-1 px-3 focus:outline-none hover:bg-white rounded text-base mt-4 md:mt-0">Cart
       {/* <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-1" viewBox="0 0 24 24">
