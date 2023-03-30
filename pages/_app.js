@@ -19,8 +19,8 @@ export default function App({ Component, pageProps }) {
 
   const saveCart = (myCart) => {
     localStorage.setItem("cart", JSON.stringify(myCart));
-    let subt = Object.keys(myCart)?.length > 0 ? Object.keys(myCart)?.reduce(v => myCart[v].qty * myCart[v].price) : 0
-    setSubTotal(subt)
+    let subt = Object.keys(myCart)?.length > 0 ? Object.keys(myCart)?.map(v => myCart[v].qty * myCart[v].price) : 0
+    setSubTotal(subt?.reduce((a,b) => a+b))
   };
 
   const addToCart = (itemCode, qty, price, name, size, variant) => {
@@ -49,6 +49,8 @@ export default function App({ Component, pageProps }) {
     setCart({});
     saveCart({});
   };
+
+  console.log("subTotal", subTotal)
   return (
     <>
       <Navbar cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} clearCart={clearCart} subTotal={subTotal}/>
