@@ -5,9 +5,12 @@ import React, { useState } from 'react'
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from 'react-icons/fa'
 import {AiFillHeart, AiOutlineDown ,AiFillStar,AiOutlineStar} from 'react-icons/ai'
 import axios from "axios"
-const Product = () => {
+import { useRouter } from 'next/router'
+const Product = ({addToCart}) => {
   const [pincode, setPincode] = useState("")
   const [error, setError] = useState(null)
+  const router = useRouter()
+  const {slug} = router.query
 
   const handlePincode = (e) => {
     const {name , value} = e.target;
@@ -98,7 +101,7 @@ const Product = () => {
         </div>
         <div className='flex'>
         <button className="flex  text-white bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded">Buy Now</button>
-          <button className="flex  text-white ml-5 bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded">Add to Cart</button>
+          <button onClick={() => addToCart(slug,1, 499, slug, "xl", "blue" )} className="flex  text-white ml-5 bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded">Add to Cart</button>
        
         </div>
         <div className='flex mt-5 justify-start align-middle'>

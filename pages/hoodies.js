@@ -17,7 +17,7 @@ const Hoodies = () => {
     <div className="flex flex-wrap -m-4">
       <div className="lg:w-1/5 md:w-1/2 p-4 w-full ">
        <div className='border-solid border-2 rounded-t-md'>
-       <Link href={'product/tshirt'} className="block relative rounded-t overflow-hidden">
+       <Link href={'product/hoodies'} className="block relative rounded-t overflow-hidden">
           <div style={{ width: "100%", height: "35vh", position: "relative" }}>
           <Image  loading="lazy" layout="fill"
             objectFit="contain" alt="ecommerce" className=" h-[35vh] block m-auto" src="/hoodies.jpg" />
@@ -32,7 +32,7 @@ const Hoodies = () => {
       </div>
       <div className="lg:w-1/5 md:w-1/2 p-4 w-full ">
        <div className='border-solid border-2 rounded-t-md'>
-       <Link href={'product/tshirt'} className="block relative rounded-t overflow-hidden">
+       <Link href={'product/hoodies'} className="block relative rounded-t overflow-hidden">
           <div style={{ width: "100%", height: "35vh", position: "relative" }}>
           <Image  loading="lazy" layout="fill"
             objectFit="contain" alt="ecommerce" className=" h-[35vh] block m-auto" src="/hoodies.jpg" />
@@ -47,7 +47,7 @@ const Hoodies = () => {
       </div>
       <div className="lg:w-1/5 md:w-1/2 p-4 w-full ">
        <div className='border-solid border-2 rounded-t-md'>
-       <Link href={'product/tshirt'} className="block relative rounded-t overflow-hidden">
+       <Link href={'product/hoodies'} className="block relative rounded-t overflow-hidden">
           <div style={{ width: "100%", height: "35vh", position: "relative" }}>
           <Image  loading="lazy" layout="fill"
             objectFit="contain" alt="ecommerce" className=" h-[35vh] block m-auto" src="/hoodies.jpg" />
@@ -62,7 +62,7 @@ const Hoodies = () => {
       </div>
       <div className="lg:w-1/5 md:w-1/2 p-4 w-full ">
        <div className='border-solid border-2 rounded-t-md'>
-       <Link href={'product/tshirt'} className="block relative rounded-t overflow-hidden">
+       <Link href={'product/hoodies'} className="block relative rounded-t overflow-hidden">
           <div style={{ width: "100%", height: "35vh", position: "relative" }}>
           <Image  loading="lazy" layout="fill"
             objectFit="contain" alt="ecommerce" className=" h-[35vh] block m-auto" src="/hoodies.jpg" />
@@ -77,7 +77,7 @@ const Hoodies = () => {
       </div>
       <div className="lg:w-1/5 md:w-1/2 p-4 w-full ">
        <div className='border-solid border-2 rounded-t-md'>
-       <Link href={'product/tshirt'} className="block relative rounded-t overflow-hidden">
+       <Link href={'product/hoodies'} className="block relative rounded-t overflow-hidden">
           <div style={{ width: "100%", height: "35vh", position: "relative" }}>
           <Image  loading="lazy" layout="fill"
             objectFit="contain" alt="ecommerce" className=" h-[35vh] block m-auto" src="/hoodies.jpg" />
@@ -92,7 +92,7 @@ const Hoodies = () => {
       </div>
       <div className="lg:w-1/5 md:w-1/2 p-4 w-full ">
        <div className='border-solid border-2 rounded-t-md'>
-       <Link href={'product/tshirt'} className="block relative rounded-t overflow-hidden">
+       <Link href={'product/hoodies'} className="block relative rounded-t overflow-hidden">
           <div style={{ width: "100%", height: "35vh", position: "relative" }}>
           <Image  loading="lazy" layout="fill"
             objectFit="contain" alt="ecommerce" className=" h-[35vh] block m-auto" src="/hoodies.jpg" />
@@ -107,7 +107,7 @@ const Hoodies = () => {
       </div>
       <div className="lg:w-1/5 md:w-1/2 p-4 w-full ">
        <div className='border-solid border-2 rounded-t-md'>
-       <Link href={'product/tshirt'} className="block relative rounded-t overflow-hidden">
+       <Link href={'product/hoodies'} className="block relative rounded-t overflow-hidden">
           <div style={{ width: "100%", height: "35vh", position: "relative" }}>
           <Image  loading="lazy" layout="fill"
             objectFit="contain" alt="ecommerce" className=" h-[35vh] block m-auto" src="/hoodies.jpg" />
@@ -122,7 +122,7 @@ const Hoodies = () => {
       </div>
       <div className="lg:w-1/5 md:w-1/2 p-4 w-full ">
        <div className='border-solid border-2 rounded-t-md'>
-       <Link href={'product/tshirt'} className="block relative rounded-t overflow-hidden">
+       <Link href={'product/hoodies'} className="block relative rounded-t overflow-hidden">
           <div style={{ width: "100%", height: "35vh", position: "relative" }}>
           <Image  loading="lazy" layout="fill"
             objectFit="contain" alt="ecommerce" className=" h-[35vh] block m-auto" src="/hoodies.jpg" />
