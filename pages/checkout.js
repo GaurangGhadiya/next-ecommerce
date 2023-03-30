@@ -132,7 +132,7 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
           </div>
           <div className="font-bold">Subtotal : ₹{subTotal}</div>
           <div className="flex align-middle">
-            <Link href="/checkout" className="flex mx-auto mt-6  text-white bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded text-lg shadow-md text-sm">
+            <Link href="/order" className="flex mx-auto mt-6  text-white bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded text-lg shadow-md text-sm">
               Pay ₹{subTotal}
             </Link>
            
