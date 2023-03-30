@@ -38,10 +38,16 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           </nav>
           <button
             onClick={handleCartOpen}
-            className="inline-flex text-black items-center bg-white border-0 py-1 px-3 focus:outline-none hover:bg-white rounded text-base mt-4 md:mt-0"
+            className="inline-flex mr-2 text-black items-center bg-white border-0 py-1 px-3 focus:outline-none hover:bg-white rounded text-base mt-4 md:mt-0"
           >
             Cart
           </button>
+          <Link
+            href="/signin"
+            className="inline-flex text-black items-center bg-white border-0 py-1 px-3 focus:outline-none hover:bg-white rounded text-base mt-4 md:mt-0"
+          >
+            Signin
+          </Link>
         </div>
       {isCartOpen && (
         <div className="bg-white w-80 shadow-md h-[100vh] p-6 absolute top-0 right-0 z-50 ">
