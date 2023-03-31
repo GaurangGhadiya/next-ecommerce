@@ -4,18 +4,18 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const Tshirts = ({products}) => {
+const Tshirts = () => {
+  const [products, setProducts] = useState([])
   console.log("new products",products)
-  // const [products, setProducts] = useState([])
 
-  // useEffect(() => {
-  //   axios.get('http://localhost:7000/api/products?category=tshirt').then((res) => {
-  //     console.log("res",res)
-  //     setProducts(res?.data?.data)
-  //   }).catch((error) => {
-  //     console.log("error",error)
-  //   })
-  // }, [])
+  useEffect(() => {
+    axios.get('http://localhost:7000/api/products?category=tshirt').then((res) => {
+      console.log("res",res)
+      setProducts(res?.data?.data)
+    }).catch((error) => {
+      console.log("error",error)
+    })
+  }, [])
   
   return (
     <>
@@ -54,14 +54,14 @@ const Tshirts = ({products}) => {
   )
 }
 
-export async function getServerSideProps() {
- let products = await axios.get('http://localhost:7000/api/products?category=tshirt').then((res) => {
-    console.log("res",res)
-    return res?.data?.data
-  }).catch((error) => {
-    console.log("error",error)
-  })
-  return { props: { products : products} }
-}
+// export async function getServerSideProps() {
+//  let products = await axios.get('http://localhost:7000/api/products?category=tshirt').then((res) => {
+//     console.log("res",res)
+//     return res?.data?.data
+//   }).catch((error) => {
+//     console.log("error",error)
+//   })
+//   return { props: { products : products} }
+// }
 
 export default Tshirts
