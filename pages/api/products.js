@@ -7,14 +7,20 @@ export default async function handler(req, res) {
         await connectMongoDb()
         if(req.method == "GET"){
             try{
-                let data = await productModel.find({})
+                let data;
+                if(req?.query?.category){
+                    data = await productModel.find({category: req.query?.category})
+                }else{
+
+                     data = await productModel.find({})
+                }
                 if(data) res.status(200).json({ data, count: data?.length})
             }catch(err){
                return res.status(400).json({ error : "Something went wrong" })
             }
 
         }else if(req.method == "POST"){
-            
+            console.log("req.body.variant",req.body.variant)
             try{
                 var productData = new productModel({
                     title : req.body.title,
@@ -22,15 +28,13 @@ export default async function handler(req, res) {
                     desc : req.body.desc,
                     image : req.body.image,
                     category : req.body.category,
-                    size :  req.body.size,
-                    color : req.body.color,
+                    variant : req.body.variant,
                     price : req.body.price,
-                    availableQty : req.body.availableQty,
                   });
                  let data = await productData.save()
                  if(data) return res.status(200).json({ message :"Product sucessfully added" , data: data })
             }catch(err){
-               return res.status(400).json({ error :"Something went wrong"  })
+               return res.status(400).json({ error :"Something went wrong" , err : err })
             }
     
         }else if(req.method == "PUT"){
