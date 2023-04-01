@@ -10,6 +10,8 @@ export default async function handler(req, res) {
                 let data;
                 if(req?.query?.category){
                     data = await productModel.find({category: req.query?.category})
+                }else if(req?.query?.slug){
+                    data = await productModel.findOne({slug: req.query?.slug})
                 }else{
 
                      data = await productModel.find({})

@@ -1,21 +1,35 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from 'react-icons/fa'
 import {AiFillHeart, AiOutlineDown ,AiFillStar,AiOutlineStar} from 'react-icons/ai'
 import axios from "axios"
 import { useRouter } from 'next/router'
-const Product = ({addToCart}) => {
+const Product = ({buyNow,addToCart,product}) => {
+  console.log(product)
   const [pincode, setPincode] = useState("")
+  const [selectedSize, setSelectedSize] = useState([...new Set(product?.variant?.map(dd => dd.size))]?.[0] ?? "")
+  const [selectedColor, setSelectedColor] = useState([...new Set(product?.variant?.map(dd => dd.color))]?.[0] ?? "")
+  const [availableQty, setAvailableQty] = useState(0)
   const [error, setError] = useState(null)
   const router = useRouter()
   const {slug} = router.query
 
+  useEffect(() => {
+    let data = product?.variant?.find(v => v?.color == selectedColor && v?.size == selectedSize)
+    console.log(data)
+    setAvailableQty(data?.quantity)
+  }, [selectedSize,selectedColor])
+  
+
+  console.log({selectedColor,selectedSize})
   const handlePincode = (e) => {
     const {name , value} = e.target;
     setPincode(value)
   }
+
+
 
   const checkPincode = () => {
     axios.get("http://localhost:7000/api/pincode").then((response) => {
@@ -34,12 +48,12 @@ const Product = ({addToCart}) => {
   <div className="container px-5 py-24 mx-auto">
     <div className="lg:w-4/5 mx-auto flex flex-wrap">
 
-              <img alt="ecommerce" className="lg:w-1/2 w-full  h-[450px] object-cover object-center rounded border-solid border-2 border-gray-100" src="/tshirt.jpg" />
+              <img alt="ecommerce" className="lg:w-1/2 w-full  h-[450px] object-cover object-center rounded border-solid border-2 border-gray-100" src={product?.image} />
 
 
       <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
         <h2 className="text-sm title-font text-gray-500 tracking-widest">BRAND NAME</h2>
-        <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">The Catcher in the Rye</h1>
+        <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">{product?.title}</h1>
         <div className="flex mb-4">
           <span className="flex items-center">
             <AiFillStar size={19} className="text-yellow-400"/>
@@ -68,41 +82,39 @@ const Product = ({addToCart}) => {
         </Link>
           </span>
         </div>
-        <p className="leading-relaxed">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.</p>
-        <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
-          <div className="flex">
+        <p className="leading-relaxed">{product?.desc}</p>
+        <div className="flex mt-4 items-start justify-center pb-5 border-b-2 border-gray-100 mb-5 flex-col">
+         <div className='flex ' style={{alignItems : "center"}}>
+         <div className="flex ">
             <span className="mr-3">Color</span>
-            <button className="border-2 border-gray-300 rounded-full w-6 h-6 focus:outline-none text-transparent" area-label='color-1'>1</button>
-            <button className="border-2 border-gray-300 ml-1 bg-gray-700 rounded-full w-6 h-6 focus:outline-none text-transparent" area-label='color-2'>2</button>
-            <button className="border-2 border-gray-300 ml-1 bg-indigo-500 rounded-full w-6 h-6 focus:outline-none text-transparent" area-label='color-3'>3</button>
-          </div>
+            {[...new Set(product?.variant?.map(dd => dd.color))]?.map((color,index) => <button key={index} className={`border-2 ml-1  ${color == "Blue" ? 'bg-blue-500' : color == "Pink" ? 'bg-pink-500' : color == "Yellow" ? 'bg-yellow-500' : color == "Green" ? 'bg-green-500' : color== "Red" ? 'bg-red-500' : ""} rounded-full w-6 h-6 focus:outline-none text-transparent`} area-label='color-3' onClick={(e) => setSelectedColor(e.target.innerHTML)}>{color}</button>)}
+           </div>
           <div className="flex ml-6 items-center">
             <span className="mr-3">Size</span>
             <div className="relative">
-              <select className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
-                <option>SM</option>
-                <option>M</option>
-                <option>L</option>
-                <option>XL</option>
+              <select onChange={(e) => setSelectedSize(e.target.value)} className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">              
+                {[...new Set(product?.variant?.map(dd => dd.size))]?.map((size,index) => <option key={index}>{size}</option>)}
               </select>
               <span className="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
                 <AiOutlineDown />
               </span>
             </div>
           </div>
+         </div>
+          <div className={`mt-5 ${availableQty > 0  ? 'text-green-500' : 'text-red-500'}`}>Available Quantity of color {selectedColor} and size {selectedSize} is : {availableQty || 0}</div>
+
         </div>
+        
         <div className="flex">
-          <span className="title-font font-medium text-2xl text-gray-900">₹499.00</span>
-          {/* <button className="flex ml-auto text-white bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded">Buy Now</button> */}
-          {/* <button className="flex ml-5 text-white bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded">Add to Cart</button> */}
-          <button className="rounded-full ml-auto w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+          <span className="title-font font-medium text-2xl text-gray-900">₹{product?.price?.toFixed(2)}</span>
+         <button className="rounded-full ml-auto w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4 mt-2">
             <AiFillHeart size={20} /> <span className='text-transparent'>1</span>
           </button>
         </div>
+        
         <div className='flex'>
-        <button className="flex  text-white bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded">Buy Now</button>
-          <button onClick={() => addToCart(slug,1, 499, slug, "xl", "blue" )} className="flex  text-white ml-5 bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded">Add to Cart</button>
-       
+        <button onClick={() => buyNow(slug,1, product?.price, product?.title, selectedSize, selectedColor )} className="flex  text-white bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded">Buy Now</button>
+          <button onClick={() => addToCart(slug,1, product?.price, product?.title, selectedSize, selectedColor )} className="flex  text-white ml-5 bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded">Add to Cart</button>
         </div>
         <div className='flex mt-5 justify-start align-middle'>
           <label className="leading-relaxed font-semibold mr-3" htmlFor="pincode">Delivery</label>
@@ -118,6 +130,19 @@ const Product = ({addToCart}) => {
 </section>
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+  let product = await axios
+    .get(`http://localhost:7000/api/products?slug=${context.query.slug}`)
+    .then((res) => {
+      console.log("res", res);
+      return res?.data?.data;
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+  return { props: { product: product } };
 }
 
 export default Product

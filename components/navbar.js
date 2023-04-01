@@ -50,7 +50,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           </Link>
         </div>
       {isCartOpen && (
-        <div className="bg-white w-80 shadow-md h-[100vh] p-6 absolute top-0 right-0 z-50 ">
+        <div className="bg-white overflow-y-auto w-80 shadow-md h-[100vh] p-6 absolute top-0 right-0 z-50 ">
           <div
             onClick={handleCartOpen}
             className="absolute top-2 right-2 cursor-pointer tex-black"
