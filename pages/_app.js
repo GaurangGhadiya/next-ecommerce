@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Toaster } from 'react-hot-toast';
+import LoadingBar from 'react-top-loading-bar'
 
 
 export default function App({ Component, pageProps }) {
@@ -12,9 +13,18 @@ export default function App({ Component, pageProps }) {
   const [subTotal, setSubTotal] = useState(0);
   const [user, setUser] = useState("");
   const [reRender, setReRender] = useState(0)
+  const [progress, setProgress] = useState(0)
+
   const router = useRouter();
 
   useEffect(() => {
+
+    router.events.on('routeChangeStart', () => {
+      setProgress(40)
+    })
+    router.events.on('routeChangeComplete', () => {
+      setProgress(100)
+    })
     try {
       if (localStorage.getItem("cart")) {
         setCart(JSON.parse(localStorage.getItem("cart")));
@@ -90,6 +100,12 @@ export default function App({ Component, pageProps }) {
   console.log("subTotal", subTotal);
   return (
     <>
+    <LoadingBar
+        color='#f11946'
+        progress={progress}
+        waitingTime={500}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <Navbar
       logout={logout}
       reRender={reRender}
@@ -105,6 +121,7 @@ export default function App({ Component, pageProps }) {
 
       <Component
         {...pageProps}
+        user={user}
         buyNow={buyNow}
         cart={cart}
         addToCart={addToCart}

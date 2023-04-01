@@ -1,13 +1,16 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { ErrorToast, SuccessToast } from '@/components/common/toast'
 
 const Signup = () => {
   const [data, setData] = useState({})
   const router = useRouter()
+  useEffect(() => {
+    if(localStorage.getItem('token')) router.push("/")
+  }, [])
 
   const handleChange = (e) => {
     const {name , value} = e.target;
