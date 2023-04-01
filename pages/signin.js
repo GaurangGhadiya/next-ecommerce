@@ -1,8 +1,31 @@
+import { ErrorToast, SuccessToast } from '@/components/common/toast'
 import Head from 'next/head'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
 const Signin = () => {
+  const [data, setData] = useState({})
+  const router = useRouter()
+
+  const handleChange = (e) => {
+    const {name , value} = e.target;
+    setData({...data, [name] : value});
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post('http://localhost:7000/api/auth/signin', data).then(res => {
+      console.log('res', res)
+      SuccessToast("Login Sucessfull")
+      localStorage.setItem('token',res?.data?.token)
+      router.push("/")
+    }).catch(e => {
+      console.log('e', e)
+      ErrorToast(e?.response?.data?.error)
+    })
+  }
   return (
     <>
      <Head>
@@ -21,16 +44,16 @@ const Signin = () => {
         <Link href="/signup" class="font-medium ml-2 text-indigo-600 hover:text-indigo-500">Signup</Link>
       </p>
     </div>
-    <form class="mt-8 space-y-6" action="#" method="POST">
+    <form class="mt-8 space-y-6" onSubmit={handleSubmit}>
       <input type="hidden" name="remember" value="true" />
       <div class="-space-y-px rounded-md shadow-sm">
         <div>
-          <label for="email-address" class="sr-only">Email address</label>
-          <input id="email-address" name="email" type="email" autocomplete="email" required class="pl-2 relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Email address" />
+          <label for="email" class="sr-only">Email address</label>
+          <input value={data?.email} onChange={handleChange} id="email" name="email" type="email" autocomplete="email" required class="pl-2 relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Email address" />
         </div>
         <div>
           <label for="password" class="sr-only">Password</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" required class="pl-2 relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Password" />
+          <input value={data?.password} onChange={handleChange} id="password" name="password" type="password" autocomplete="current-password" required class="pl-2 relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Password" />
         </div>
       </div>
 

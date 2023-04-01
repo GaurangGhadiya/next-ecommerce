@@ -6,9 +6,10 @@ import {
   AiOutlineMinusCircle,
 } from "react-icons/ai";
 
-const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
+const Navbar = ({user, cart, addToCart, removeFromCart, clearCart, subTotal ,logout}) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
-
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  console.log('user', user)
   const handleCartOpen = () => {
     setIsCartOpen(!isCartOpen);
   };
@@ -36,18 +37,37 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               Mugs
             </Link>
           </nav>
-          <button
-            onClick={handleCartOpen}
+          
+          {!user && <Link
+            href="/signin"
             className="inline-flex mr-2 text-black items-center bg-white border-0 py-1 px-3 focus:outline-none hover:bg-white rounded text-base mt-4 md:mt-0"
+          >
+            Signin
+          </Link>}
+          <div onMouseOver={() => setIsDropdownOpen(true)} onMouseLeave={() => setIsDropdownOpen(false)}>
+          {
+            user && <div onMouseOver={() => setIsDropdownOpen(true)} onMouseLeave={() => setIsDropdownOpen(false)}
+            className="inline-flex mr-2 cursor-pointer text-black items-center bg-white border-0 py-1 px-3 focus:outline-none hover:bg-white rounded text-base mt-4 md:mt-0"
+          >
+            Profile
+          </div>
+          }
+          {isDropdownOpen && <div onMouseOver={() => setIsDropdownOpen(true)} onMouseLeave={() => setIsDropdownOpen(false)} 
+          className="absolute top-14 right-20 bg-white p-3 w-36 rounded shadow-md"
+          >
+            <ul className="text-sm ">
+              <Link href={"/account"}><li>My Account</li></Link>
+              <Link href={"/my-order"}><li className="my-2">Orders</li></Link>
+              <li onClick={logout} className="cursor-pointer">Logout</li>
+            </ul>
+            </div>}
+          </div>
+            <button
+            onClick={handleCartOpen}
+            className="inline-flex  text-black items-center bg-white border-0 py-1 px-3 focus:outline-none hover:bg-white rounded text-base mt-4 md:mt-0"
           >
             Cart
           </button>
-          <Link
-            href="/signin"
-            className="inline-flex text-black items-center bg-white border-0 py-1 px-3 focus:outline-none hover:bg-white rounded text-base mt-4 md:mt-0"
-          >
-            Signin
-          </Link>
         </div>
       {isCartOpen && (
         <div className="bg-white overflow-y-auto w-80 shadow-md h-[100vh] p-6 absolute top-0 right-0 z-50 ">

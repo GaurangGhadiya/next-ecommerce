@@ -10,6 +10,8 @@ import { Toaster } from 'react-hot-toast';
 export default function App({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [subTotal, setSubTotal] = useState(0);
+  const [user, setUser] = useState("");
+  const [reRender, setReRender] = useState(0)
   const router = useRouter();
 
   useEffect(() => {
@@ -20,7 +22,13 @@ export default function App({ Component, pageProps }) {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+    let token = localStorage.getItem("token");
+    if(token){
+      setUser(token);
+      setReRender(Math.random())
+
+    }
+  }, [router.query]);
 
   const saveCart = (myCart) => {
     localStorage.setItem("cart", JSON.stringify(myCart));
@@ -66,7 +74,13 @@ export default function App({ Component, pageProps }) {
     setCart(myCart);
     saveCart(myCart);
     router.push("/checkout");
-  };
+  }; 
+  const logout = () => {
+    localStorage.removeItem("token")
+    setUser("")
+    setReRender(Math.random())
+    router.push("/signin")
+  }
 
   const clearCart = () => {
     setCart({});
@@ -77,6 +91,9 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Navbar
+      logout={logout}
+      reRender={reRender}
+      user={user}
         buyNow={buyNow}
         cart={cart}
         addToCart={addToCart}
