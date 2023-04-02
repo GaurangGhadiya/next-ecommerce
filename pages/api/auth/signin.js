@@ -22,7 +22,7 @@ var originalText = bytes.toString(CryptoJS.enc.Utf8);
 
             return res
               .status(200)
-              .json({ message: "Sign in Successfully", token});
+              .json({ message: "Sign in Successfully", token, data :userData });
           } else {
             return res.status(400).json({ message: "invalid credential" });
           }

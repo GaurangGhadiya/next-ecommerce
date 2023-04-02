@@ -1,7 +1,30 @@
+import axios from 'axios';
 import Head from 'next/head'
-import React from 'react'
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react'
 
-const MyOrder = () => {
+const MyOrder = ({ userData}) => {
+  const [orders, setOrders] = useState([])
+const router = useRouter()
+
+ const getData = async () => {
+  await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}api/order?email=${userData?.email}`)
+    .then((res) => {
+      console.log("res", res);
+      setOrders(res?.data?.data);
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+ }
+ useEffect(() => {
+  if(userData?.email){
+    
+    getData()
+  }
+  }, [userData])
+  
   return (
     <>  <Head>
     <title>Create Next App</title>
@@ -19,40 +42,24 @@ const MyOrder = () => {
           <thead class="border-b font-medium light:border-neutral-500">
             <tr>
               <th scope="col" class="px-6 py-4">#</th>
-              <th scope="col" class="px-6 py-4">First</th>
-              <th scope="col" class="px-6 py-4">Last</th>
-              <th scope="col" class="px-6 py-4">Handle</th>
+              <th scope="col" class="px-6 py-4">Email</th>
+              <th scope="col" class="px-6 py-4">Amount</th>
+              <th scope="col" class="px-6 py-4">Status</th>
+              <th scope="col" class="px-6 py-4">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr
+            {orders.map(v => {
+              return <tr key={v?._id}
               class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 light:border-neutral-500 light:hover:bg-neutral-600">
-              <td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
-              <td class="whitespace-nowrap px-6 py-4">Mark</td>
-              <td class="whitespace-nowrap px-6 py-4">Otto</td>
-              <td class="whitespace-nowrap px-6 py-4">@mdo</td>
+              <td class="whitespace-nowrap px-6 py-4 font-medium">{v?.orderId}</td>
+              <td class="whitespace-nowrap px-6 py-4">{v?.email}</td>
+              <td class="whitespace-nowrap px-6 py-4">₹{v?.amount?.toFixed(2)}</td>
+              <td class="whitespace-nowrap px-6 py-4">{v?.status}</td>
+              <td class="whitespace-nowrap px-6 py-4 cursor-pointer" onClick={() => router.push(`/order?id=${v?.orderId}`)}>Details</td>
             </tr>
-            <tr
-              class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 light:border-neutral-500 light:hover:bg-neutral-600">
-              <td class="whitespace-nowrap px-6 py-4 font-medium">2</td>
-              <td class="whitespace-nowrap px-6 py-4">Jacob</td>
-              <td class="whitespace-nowrap px-6 py-4">Thornton</td>
-              <td class="whitespace-nowrap px-6 py-4">@fat</td>
-            </tr>
-            <tr
-              class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 light:border-neutral-500 light:hover:bg-neutral-600">
-              <td class="whitespace-nowrap px-6 py-4 font-medium">3</td>
-              <td class="whitespace-nowrap px-6 py-4">Larry</td>
-              <td class="whitespace-nowrap px-6 py-4">Wild</td>
-              <td class="whitespace-nowrap px-6 py-4">@twitter</td>
-            </tr>
-            <tr
-              class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 light:border-neutral-500 light:hover:bg-neutral-600">
-              <td class="whitespace-nowrap px-6 py-4 font-medium">4</td>
-              <td class="whitespace-nowrap px-6 py-4">Larry</td>
-              <td class="whitespace-nowrap px-6 py-4">Wild</td>
-              <td class="whitespace-nowrap px-6 py-4">@twitter</td>
-            </tr>
+            })}
+           
           </tbody>
         </table>
       </div>

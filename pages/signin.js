@@ -24,6 +24,7 @@ const Signin = ({user}) => {
       console.log('res', res)
       SuccessToast("Login Sucessfull")
       localStorage.setItem('token',res?.data?.token)
+      localStorage.setItem('userData',JSON.stringify(res?.data?.data))
       router.push("/")
     }).catch(e => {
       console.log('e', e)

@@ -14,6 +14,7 @@ export default function App({ Component, pageProps }) {
   const [user, setUser] = useState("");
   const [reRender, setReRender] = useState(0)
   const [progress, setProgress] = useState(0)
+  const [userData, setUserData] = useState({})
 
   const router = useRouter();
 
@@ -26,6 +27,9 @@ export default function App({ Component, pageProps }) {
       setProgress(100)
     })
     try {
+      if (localStorage.getItem("userData")) {
+        setUserData(JSON.parse(localStorage.getItem("userData")));
+      }
       if (localStorage.getItem("cart")) {
         setCart(JSON.parse(localStorage.getItem("cart")));
       }
@@ -75,6 +79,7 @@ export default function App({ Component, pageProps }) {
     saveCart(myCart);
   };
 
+
   const buyNow = (itemCode, qty, price, name, size, variant) => {
     let myCart = {
       [itemCode]: { itemCode, qty: qty, price, name, size, variant },
@@ -109,6 +114,7 @@ export default function App({ Component, pageProps }) {
       logout={logout}
       reRender={reRender}
       user={user}
+      userData={userData}
         buyNow={buyNow}
         cart={cart}
         addToCart={addToCart}
@@ -120,6 +126,7 @@ export default function App({ Component, pageProps }) {
 
       <Component
         {...pageProps}
+        userData={userData}
         user={user}
         buyNow={buyNow}
         cart={cart}

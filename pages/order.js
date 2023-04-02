@@ -1,4 +1,3 @@
-import orderModel from '@/models/orders'
 import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -57,17 +56,16 @@ console.log('products', products)
 }
 
 export async function getServerSideProps(context) {
-  // let order = await axios
-  //   .get(`${process.env.NEXT_PUBLIC_API_URL}api/order?id=${context?.query?.id}`)
-  //   .then((res) => {
-  //     console.log("res", res);
-  //     return res?.data?.data;
-  //   })
-  //   .catch((error) => {
-  //     console.log("error", error);
-  //   });
-  let data = await orderModel.findOne({orderId: context.query?.id})
-  return { props: { order: JSON.parse(JSON.stringify(data)) } };
+  let order = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}api/order?id=${context?.query?.id}`)
+    .then((res) => {
+      console.log("res", res);
+      return res?.data?.data;
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+  return { props: { order: order } };
 }
 
 export default Order
