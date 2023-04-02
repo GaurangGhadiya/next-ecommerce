@@ -2,23 +2,36 @@ import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import Script from "next/script";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
-const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
-  const [userData, setUserData] = useState({})
+const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart, userData}) => {
+  const [formData, setformData] = useState()
   const handleChange = (e) => {
     const {name,value} = e.target
-    setUserData({...userData, [name] : value})
-  }
 
-  console.log("userData",userData)
+    if(name === "pincode" && value?.length === 6){
+      axios.get(`https://api.postalpincode.in/pincode/${value}`).then(res =>{
+        setformData({...formData, city : res?.data?.[0]?.PostOffice?.[0]?.District, state : res?.data?.[0]?.PostOffice?.[0]?.State, [name] : value})
+
+      })
+    }else{
+      setformData({...formData, city : "", state : "", [name] : value})
+    }
+  }
+useEffect(() => {
+  if(userData) setformData({...formData, email: userData.email})
+}, [userData])
+
+
+
+  console.log("formData",formData)
   const checkout = (e) => {
     const body ={
       amount: subTotal,
-      email: userData.email,
+      email: formData.email,
       products :cart,
-      address : userData.address
+      address : formData.address
     }
     axios.post(`${process.env.NEXT_PUBLIC_API_URL}api/payment/checkout`, body).then((response) => {
       console.log("prder created",response, typeof response?.data?.order?.amount);
@@ -32,12 +45,12 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
         order_id: response?.data?.order?.id,
         callback_url: `${process.env.NEXT_PUBLIC_API_URL}api/payment/paymentVerification`,
         prefill: {
-            name: userData?.name,
-            email: userData?.email,
-            contact: userData?.phone
+            name: formData?.name,
+            email: formData?.email,
+            contact: formData?.phone
         },
         notes: {
-            address: userData?.address
+            address: formData?.address
         },
         theme: {
             color: "#3399cc"
@@ -68,7 +81,7 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
               Name
             </label>
             <input
-            value={userData?.name}
+            value={formData?.name}
             onChange={handleChange}
               type="name"
               id="name"
@@ -83,12 +96,13 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
               Email
             </label>
             <input
-             value={userData?.email}
+             value={formData?.email}
              onChange={handleChange}
+             disabled
               type="email"
               id="email"
               name="email"
-              class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              class="disabled:bg-gray-100 w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
         </div>
@@ -98,7 +112,7 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
         <div className="px-2 w-full">
         <div class="mb-4">
         <label for="address" class="leading-7 text-sm text-gray-600 required">Address</label>
-        <textarea  value={userData?.address}
+        <textarea  value={formData?.address}
             onChange={handleChange} id="address" name="address" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
       </div>
         </div>
@@ -110,7 +124,7 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
               Phone
             </label>
             <input
-             value={userData?.phone}
+             value={formData?.phone}
              onChange={handleChange}
               type="phone"
               id="phone"
@@ -121,39 +135,11 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
         </div>
         <div className="px-2 w-1/2">
           <div class=" mb-4">
-            <label for="state" class="leading-7 text-sm text-gray-600">
-              State
-            </label>
-            <input
-              type="state"
-              id="state"
-              name="state"
-              class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="flex mx-auto">
-        <div className="px-2 w-1/2">
-          <div class=" mb-4">
-            <label for="city" class="leading-7 text-sm text-gray-600">
-              City
-            </label>
-            <input
-              type="city"
-              id="city"
-              name="city"
-              class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-            />
-          </div>
-        </div>
-        <div className="px-2 w-1/2">
-          <div class=" mb-4">
             <label for="pincode" class="leading-7 text-sm text-gray-600 required">
               Pincode
             </label>
             <input
-             value={userData?.pincode}
+             value={formData?.pincode}
              onChange={handleChange}
               type="pincode"
               id="pincode"
@@ -162,6 +148,43 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
             />
           </div>
         </div>
+      
+      </div>
+      <div className="flex mx-auto">
+        <div className="px-2 w-1/2">
+          <div class=" mb-4">
+            <label for="city" class="leading-7 text-sm text-gray-600">
+              City
+            </label>
+            <input
+              value={formData?.city}
+              onChange={handleChange}
+              type="city"
+              disabled
+              id="city"
+              name="city"
+              class="disabled:bg-gray-100 w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+            />
+          </div>
+        </div>
+        
+        <div className="px-2 w-1/2">
+          <div class=" mb-4">
+            <label for="state" class="leading-7 text-sm text-gray-600">
+              State
+            </label>
+            <input
+              value={formData?.state}
+              onChange={handleChange}
+              type="state"
+              disabled
+              id="state"
+              name="state"
+              class="disabled:bg-gray-100 w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+            />
+          </div>
+        </div>
+
       </div>
 
       <h2 className="font-semibold my-2">2. Review Cart Items & Pay</h2>
