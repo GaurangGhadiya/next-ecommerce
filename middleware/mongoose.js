@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Razorpay from "razorpay";
 
 export const connectMongoDb = async() => {
     console.log('first')
@@ -10,3 +11,8 @@ export const connectMongoDb = async() => {
 
     await mongoose.connect(process.env.MONGO_URI)
 }
+
+export const instance = new Razorpay({
+    key_id: process.env.PAYMENT_API_KEY,
+    key_secret: process.env.PAYMENT_API_SECRET,
+  });

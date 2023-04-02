@@ -1,9 +1,54 @@
+import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
+import Script from "next/script";
+import React, { useState } from "react";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
 const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
+  const [userData, setUserData] = useState({})
+  const handleChange = (e) => {
+    const {name,value} = e.target
+    setUserData({...userData, [name] : value})
+  }
+
+  console.log("userData",userData)
+  const checkout = (e) => {
+    const body ={
+      amount: subTotal,
+      email: userData.email,
+      products :cart,
+      address : userData.address
+    }
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}api/payment/checkout`, body).then((response) => {
+      console.log("prder created",response, typeof response?.data?.order?.amount);
+      var options = {
+        key: process.env.PAYMENT_API_KEY, 
+        amount: response?.data?.order?.amount, 
+        currency: "INR",
+        name: "Gauran Ghadiya",
+        description: "Test Transaction",
+        image: "https://media.licdn.com/dms/image/C4D03AQEgTqpEREcAeA/profile-displayphoto-shrink_800_800/0/1628130809488?e=2147483647&v=beta&t=5SJkdy1bIpoyDCumi1Cl0bi8h8D2mBjucQaqFx4ivjY",
+        order_id: response?.data?.order?.id,
+        callback_url: `${process.env.NEXT_PUBLIC_API_URL}api/payment/paymentVerification`,
+        prefill: {
+            name: userData?.name,
+            email: userData?.email,
+            contact: userData?.phone
+        },
+        notes: {
+            address: userData?.address
+        },
+        theme: {
+            color: "#3399cc"
+        }
+    };
+    var rzp1 = new window.Razorpay(options);
+    rzp1.open();
+    // e.preventDefault();
+
+    })
+  }
   return (
     <>    <Head>
     <title>Create Next App</title>
@@ -11,16 +56,20 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.ico" />
   </Head>
+  <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+
     <div className="container  mx-auto">
       <h1 className=" font-semibold text-center my-7 text-2xl">Checkout</h1>
       <h2 className="font-semibold my-2">1. Delivery Details</h2>
       <div className="flex mx-auto">
         <div className="px-2 w-1/2">
           <div class=" mb-4">
-            <label for="name" class="leading-7 text-sm text-gray-600">
+            <label for="name" class=" required leading-7 text-sm text-gray-600">
               Name
             </label>
             <input
+            value={userData?.name}
+            onChange={handleChange}
               type="name"
               id="name"
               name="name"
@@ -30,10 +79,12 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
         </div>
         <div className="px-2 w-1/2">
           <div class=" mb-4">
-            <label for="email" class="leading-7 text-sm text-gray-600">
+            <label for="email" class=" required leading-7 text-sm text-gray-600">
               Email
             </label>
             <input
+             value={userData?.email}
+             onChange={handleChange}
               type="email"
               id="email"
               name="email"
@@ -46,18 +97,21 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
 
         <div className="px-2 w-full">
         <div class="mb-4">
-        <label for="address" class="leading-7 text-sm text-gray-600">Address</label>
-        <textarea id="address" name="address" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+        <label for="address" class="leading-7 text-sm text-gray-600 required">Address</label>
+        <textarea  value={userData?.address}
+            onChange={handleChange} id="address" name="address" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
       </div>
         </div>
 </div>
       <div className="flex mx-auto">
         <div className="px-2 w-1/2">
           <div class=" mb-4">
-            <label for="phone" class="leading-7 text-sm text-gray-600">
+            <label for="phone" class="leading-7 text-sm text-gray-600 required">
               Phone
             </label>
             <input
+             value={userData?.phone}
+             onChange={handleChange}
               type="phone"
               id="phone"
               name="phone"
@@ -95,10 +149,12 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
         </div>
         <div className="px-2 w-1/2">
           <div class=" mb-4">
-            <label for="pincode" class="leading-7 text-sm text-gray-600">
+            <label for="pincode" class="leading-7 text-sm text-gray-600 required">
               Pincode
             </label>
             <input
+             value={userData?.pincode}
+             onChange={handleChange}
               type="pincode"
               id="pincode"
               name="pincode"
@@ -132,9 +188,9 @@ const Checkout = ({cart, addToCart, removeFromCart,subTotal,clearCart}) => {
           </div>
           <div className="font-bold">Subtotal : ₹{subTotal}</div>
           <div className="flex align-middle">
-            <Link href="/order" className="flex mx-auto mt-6  text-white bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded text-lg shadow-md text-sm">
+            <button onClick={checkout} className="flex mx-auto mt-6  text-white bg-black border-0 py-2 px-6 focus:outline-none hover:bg-black rounded text-lg shadow-md text-sm">
               Pay ₹{subTotal}
-            </Link>
+            </button>
            
           </div>
         </div>

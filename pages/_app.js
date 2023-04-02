@@ -34,10 +34,9 @@ export default function App({ Component, pageProps }) {
     }
     let token = localStorage.getItem("token");
     if(token){
-      setUser(token);
-      setReRender(Math.random())
-
+      setUser(token);   
     }
+    setReRender(Math.random())
   }, [router.query]);
 
   const saveCart = (myCart) => {
@@ -78,7 +77,7 @@ export default function App({ Component, pageProps }) {
 
   const buyNow = (itemCode, qty, price, name, size, variant) => {
     let myCart = {
-      itemCode: { itemCode, qty: qty, price, name, size, variant },
+      [itemCode]: { itemCode, qty: qty, price, name, size, variant },
     };
 
     setCart(myCart);
