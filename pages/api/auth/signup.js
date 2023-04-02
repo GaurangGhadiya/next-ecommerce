@@ -15,7 +15,7 @@ export default async function handler(req, res) {
               return res.status(400).json({ error :"user already found" })
 
               }else{
-                var ciphertext = CryptoJS.AES.encrypt(req.body.password, 'secret key 123').toString();
+                var ciphertext = CryptoJS.AES.encrypt(req.body.password, process.env.AES_SECRET).toString();
 
                 var userData = new userModel({
                     name : req.body.name,

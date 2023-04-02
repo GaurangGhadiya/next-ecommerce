@@ -12,13 +12,13 @@ export default async function handler(req, res) {
       try {
         let userData = await userModel.findOne({ email: req.body.email });
         if (userData) {
-          var bytes  = CryptoJS.AES.decrypt(userData.password, 'secret key 123');
+          var bytes  = CryptoJS.AES.decrypt(userData.password, process.env.AES_SECRET);
 var originalText = bytes.toString(CryptoJS.enc.Utf8);
           if (
             req.body.email == userData.email &&
             req.body.password == originalText
           ) {
-            var token = jwt.sign({...userData}, 'shhhhh');
+            var token = jwt.sign({...userData}, process.env.JWT_SECRET);
 
             return res
               .status(200)
