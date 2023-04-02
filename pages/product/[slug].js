@@ -32,7 +32,7 @@ const Product = ({buyNow,addToCart,product}) => {
 
 
   const checkPincode = () => {
-    axios.get("http://localhost:7000/api/pincode").then((response) => {
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/pincode`).then((response) => {
       response?.data?.data?.includes(pincode) ? setError(false) : setError(true)
     })
   }
@@ -134,7 +134,7 @@ const Product = ({buyNow,addToCart,product}) => {
 
 export async function getServerSideProps(context) {
   let product = await axios
-    .get(`http://localhost:7000/api/products?slug=${context.query.slug}`)
+    .get(`${process.env.NEXT_PUBLIC_API_URL}api/products?slug=${context.query.slug}`)
     .then((res) => {
       console.log("res", res);
       return res?.data?.data;

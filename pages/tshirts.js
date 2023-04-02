@@ -69,7 +69,7 @@ const Tshirts = ({ products }) => {
 
 export async function getServerSideProps() {
   let products = await axios
-    .get("http://localhost:7000/api/products?category=tshirt")
+    .get(`${process.env.NEXT_PUBLIC_API_URL}api/products?category=tshirt`)
     .then((res) => {
       console.log("res", res);
       return res?.data?.data;

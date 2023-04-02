@@ -69,7 +69,7 @@ const Stickers = ({ products }) => {
 
 export async function getServerSideProps() {
   let products = await axios
-    .get("http://localhost:7000/api/products?category=sticker")
+    .get(`${process.env.NEXT_PUBLIC_API_URL}api/products?category=sticker`)
     .then((res) => {
       console.log("res", res);
       return res?.data?.data;

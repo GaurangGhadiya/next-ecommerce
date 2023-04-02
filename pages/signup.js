@@ -19,7 +19,7 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:7000/api/auth/signup', data).then(res => {
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}api/auth/signup`, data).then(res => {
       SuccessToast("Sign up Sucessfull")
       router.push("/signin")
     }).catch(e => {

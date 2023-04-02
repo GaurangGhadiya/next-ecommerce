@@ -20,7 +20,7 @@ const Signin = ({user}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:7000/api/auth/signin', data).then(res => {
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}api/auth/signin`, data).then(res => {
       console.log('res', res)
       SuccessToast("Login Sucessfull")
       localStorage.setItem('token',res?.data?.token)
